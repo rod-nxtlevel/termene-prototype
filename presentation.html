@@ -80,6 +80,11 @@
             transform: translateX(-60px);
         }
 
+        .slide.exit-right {
+            opacity: 0;
+            transform: translateX(60px);
+        }
+
         .slide-inner {
             max-width: 1100px;
             width: 100%;
@@ -865,7 +870,7 @@
                             <div class="browser-url">termene.ro/book-a-meeting-contact</div>
                         </div>
                         <div class="screenshot-annotated">
-                            <img src="screenshots/02-signup-form-email.png" alt="Signup form">
+                            <img src="screenshots/01-signup-page-book-a-meeting.png" alt="Signup - book a meeting page">
                             <div class="annotation arrow-left" style="top:12%;right:4%;font-size:11px;max-width:180px;white-space:normal;line-height:1.3;">Sales signal on a self-service page</div>
                             <div class="annotation arrow-down" style="bottom:8%;left:4%;font-size:11px;max-width:200px;white-space:normal;line-height:1.3;">URL: /book-a-meeting-contact</div>
                         </div>
@@ -1273,7 +1278,7 @@
 
         // Remove active from old
         oldSlide.classList.remove('active');
-        oldSlide.classList.add(goingForward ? 'exit-left' : '');
+        oldSlide.classList.add(goingForward ? 'exit-left' : 'exit-right');
         oldSlide.style.transform = goingForward ? 'translateX(-60px)' : 'translateX(60px)';
         oldSlide.style.opacity = '0';
 
@@ -1291,7 +1296,7 @@
 
         // Clean up old
         setTimeout(() => {
-            oldSlide.classList.remove('exit-left');
+            oldSlide.classList.remove('exit-left', 'exit-right');
             oldSlide.style.transform = '';
             oldSlide.style.opacity = '';
         }, 500);
