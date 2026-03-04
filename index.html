@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termene.ro — Business Intelligence for Romanian Companies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy: #0A0E1F;
+            --navy-light: #131835;
+            --navy-mid: #1a2040;
+            --blue: #3D7FFF;
+            --blue-hover: #2B6BEE;
+            --blue-glow: rgba(61, 127, 255, 0.15);
+            --green: #10B981;
+            --amber: #F59E0B;
+            --red: #EF4444;
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 24px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(10, 14, 31, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--white);
+            text-decoration: none;
+        }
+        .nav-logo span { color: var(--blue); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        .nav-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--white); }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-ghost {
+            background: none;
+            color: var(--gray-300);
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+        .btn-ghost:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+
+        .btn-primary {
+            background: var(--blue);
+            color: var(--white);
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        .btn-primary:hover { background: var(--blue-hover); transform: translateY(-1px); }
+
+        .btn-primary-lg {
+            background: var(--blue);
+            color: var(--white);
+            font-size: 16px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(61, 127, 255, 0.3);
+        }
+        .btn-primary-lg:hover { background: var(--blue-hover); transform: translateY(-2px); box-shadow: 0 0 60px rgba(61, 127, 255, 0.4); }
+
+        .btn-outline-lg {
+            background: transparent;
+            color: var(--gray-300);
+            font-size: 16px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .btn-outline-lg:hover { border-color: rgba(255,255,255,0.3); color: var(--white); background: rgba(255,255,255,0.03); }
+
+        /* ---- HERO ---- */
+        .hero {
+            padding: 160px 24px 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(61, 127, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(61, 127, 255, 0.1);
+            border: 1px solid rgba(61, 127, 255, 0.2);
+            border-radius: 100px;
+            padding: 6px 16px 6px 10px;
+            font-size: 13px;
+            color: var(--blue);
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            max-width: 780px;
+            margin: 0 auto 24px;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--gray-400);
+            max-width: 560px;
+            margin: 0 auto 48px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* ---- SOCIAL PROOF ---- */
+        .social-proof {
+            padding: 60px 24px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .social-proof p {
+            font-size: 14px;
+            color: var(--gray-500);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 32px;
+        }
+
+        .logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            opacity: 0.4;
+        }
+
+        .logo-placeholder {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-300);
+            letter-spacing: -0.3px;
+        }
+
+        /* ---- PREVIEW SECTION ---- */
+        .preview-section {
+            padding: 80px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .preview-section h2 {
+            text-align: center;
+            font-size: clamp(24px, 3vw, 40px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .preview-section > p {
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 18px;
+            margin-bottom: 48px;
+        }
+
+        .preview-card {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-header {
+            padding: 32px 32px 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .preview-company-name {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .preview-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
+
+        .preview-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1px;
+            background: rgba(255,255,255,0.04);
+            margin: 24px 32px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .preview-stat {
+            background: var(--navy-light);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .preview-stat-label {
+            font-size: 12px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .preview-stat-value {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .preview-stat-change {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .preview-blur-overlay {
+            position: relative;
+            margin: 0 32px 32px;
+            height: 200px;
+            background: var(--navy-mid);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .preview-blur-content {
+            padding: 24px;
+            filter: blur(6px);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .preview-blur-line {
+            height: 14px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        .preview-blur-line:nth-child(2) { width: 75%; }
+        .preview-blur-line:nth-child(3) { width: 60%; }
+        .preview-blur-line:nth-child(4) { width: 85%; }
+        .preview-blur-line:nth-child(5) { width: 50%; }
+        .preview-blur-line:nth-child(6) { width: 70%; }
+        .preview-blur-line:nth-child(7) { width: 40%; }
+
+        .preview-unlock-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 14, 31, 0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .preview-unlock-overlay i { margin-bottom: 12px; color: var(--blue); }
+
+        .preview-unlock-overlay p {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .btn-sm {
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: var(--blue);
+            color: var(--white);
+        }
+        .btn-sm:hover { background: var(--blue-hover); }
+
+        /* ---- FEATURES ---- */
+        .features {
+            padding: 100px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: clamp(24px, 3vw, 40px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+        .features > p {
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 18px;
+            margin-bottom: 64px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 32px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .feature-card:hover { border-color: rgba(61, 127, 255, 0.2); transform: translateY(-4px); }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon.blue { background: rgba(61, 127, 255, 0.1); color: var(--blue); }
+        .feature-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+        .feature-icon.amber { background: rgba(245, 158, 11, 0.1); color: var(--amber); }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--gray-400);
+            line-height: 1.6;
+        }
+
+        /* ---- PRICING TEASER ---- */
+        .pricing-teaser {
+            padding: 100px 24px;
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(61, 127, 255, 0.03), transparent);
+        }
+
+        .pricing-teaser h2 {
+            font-size: clamp(24px, 3vw, 40px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .pricing-teaser > p {
+            color: var(--gray-400);
+            font-size: 18px;
+            margin-bottom: 48px;
+        }
+
+        .pricing-cards {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 40px 32px;
+            flex: 1;
+            min-width: 280px;
+            max-width: 380px;
+            text-align: left;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--blue);
+            box-shadow: 0 0 60px rgba(61, 127, 255, 0.1);
+        }
+
+        .pricing-popular {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--blue);
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 16px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pricing-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pricing-card .price {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+        .pricing-card .price span {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--gray-400);
+        }
+
+        .pricing-card .price-sub {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--gray-300);
+            padding: 8px 0;
+        }
+        .pricing-features li i { color: var(--green); width: 18px; height: 18px; flex-shrink: 0; }
+
+        .pricing-card .btn-primary, .pricing-card .btn-outline-lg {
+            width: 100%;
+            font-size: 14px;
+            padding: 14px;
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            padding: 60px 24px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        footer p {
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding: 120px 20px 60px; }
+            .hero-cta { flex-direction: column; }
+            .preview-header { padding: 20px 20px 0; }
+            .preview-stats { margin: 16px 20px; }
+            .preview-blur-overlay { margin: 0 20px 20px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .pricing-cards { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="index.html" class="nav-logo">termene<span>.ro</span></a>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#">About</a>
+    </div>
+    <div class="nav-cta">
+        <a href="signup.html" class="btn btn-ghost">Log in</a>
+        <a href="signup.html" class="btn btn-primary">Start free</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Updated daily from official Romanian sources
+    </div>
+    <h1>Make data-driven decisions about Romanian companies</h1>
+    <p>Financial performance, risk scores, court cases, and fiscal status — all in one place. Search any of 1.2M+ companies instantly.</p>
+    <div class="hero-cta">
+        <a href="signup.html" class="btn btn-primary-lg">Try free — no credit card <i data-lucide="arrow-right" style="width:18px;height:18px"></i></a>
+        <a href="#pricing" class="btn btn-outline-lg">See pricing</a>
+    </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="social-proof">
+    <p>Trusted by 100,000+ companies across Romania</p>
+    <div class="logos">
+        <div class="logo-placeholder">eMAG</div>
+        <div class="logo-placeholder">Banca Transilvania</div>
+        <div class="logo-placeholder">Dedeman</div>
+        <div class="logo-placeholder">Altex</div>
+        <div class="logo-placeholder">Flanco</div>
+    </div>
+</section>
+
+<!-- PREVIEW -->
+<section class="preview-section">
+    <h2>See the full story behind any company</h2>
+    <p>Financial data, risk scores, and legal records — visible before you commit.</p>
+
+    <div class="preview-card">
+        <div class="preview-header">
+            <div>
+                <div class="preview-company-name">Termene Just SRL</div>
+                <span style="color: var(--gray-500); font-size: 14px;">CUI: 34567890 · București, Sector 1</span>
+            </div>
+            <div class="preview-badge">
+                <i data-lucide="check-circle" style="width:14px;height:14px"></i>
+                Active
+            </div>
+        </div>
+
+        <div class="preview-stats">
+            <div class="preview-stat">
+                <div class="preview-stat-label">Revenue</div>
+                <div class="preview-stat-value">16M <span style="font-size:14px;color:var(--gray-400)">RON</span></div>
+                <div class="preview-stat-change">+19% YoY</div>
+            </div>
+            <div class="preview-stat">
+                <div class="preview-stat-label">Profit</div>
+                <div class="preview-stat-value">2.1M <span style="font-size:14px;color:var(--gray-400)">RON</span></div>
+                <div class="preview-stat-change">+12% YoY</div>
+            </div>
+            <div class="preview-stat">
+                <div class="preview-stat-label">Employees</div>
+                <div class="preview-stat-value">48</div>
+                <div class="preview-stat-change">+50% YoY</div>
+            </div>
+            <div class="preview-stat">
+                <div class="preview-stat-label">Founded</div>
+                <div class="preview-stat-value">2014</div>
+                <div class="preview-stat-change" style="color: var(--gray-500)">10 years</div>
+            </div>
+        </div>
+
+        <div class="preview-blur-overlay">
+            <div class="preview-blur-content">
+                <div class="preview-blur-line"></div>
+                <div class="preview-blur-line"></div>
+                <div class="preview-blur-line"></div>
+                <div class="preview-blur-line"></div>
+                <div class="preview-blur-line"></div>
+                <div class="preview-blur-line"></div>
+                <div class="preview-blur-line"></div>
+            </div>
+            <div class="preview-unlock-overlay">
+                <i data-lucide="lock" style="width:24px;height:24px"></i>
+                <p>Financial deep-dive, court cases & more</p>
+                <a href="signup.html" class="btn btn-sm">Sign up free to see basics <i data-lucide="arrow-right" style="width:14px;height:14px"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+    <h2>Everything you need for due diligence</h2>
+    <p>From quick lookups to deep financial analysis.</p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon blue"><i data-lucide="search"></i></div>
+            <h3>Instant Company Lookup</h3>
+            <p>Search by company name, CUI, email, or phone number. Get results instantly from official Romanian registries.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon green"><i data-lucide="shield-check"></i></div>
+            <h3>Risk Scores</h3>
+            <p>Commercial risk, insolvency probability, and payment capacity — calculated from real financial data and court records.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon amber"><i data-lucide="scale"></i></div>
+            <h3>Court Case Monitoring</h3>
+            <p>Track active and historical court cases. Get alerts when new cases are filed against companies you follow.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon blue"><i data-lucide="bar-chart-3"></i></div>
+            <h3>Financial Analysis</h3>
+            <p>Revenue trends, profitability ratios, and balance sheet breakdowns — going back up to 10 years.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon green"><i data-lucide="users"></i></div>
+            <h3>Shareholder Networks</h3>
+            <p>Visualize ownership structures, related companies, and beneficial owners across the entire Romanian registry.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon amber"><i data-lucide="file-text"></i></div>
+            <h3>ANAF Fiscal Status</h3>
+            <p>Real-time fiscal status from ANAF: VAT registration, tax debts, split VAT, and inactive status checks.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-teaser" id="pricing">
+    <h2>Simple, transparent pricing</h2>
+    <p>Start free. Upgrade when you need more depth.</p>
+
+    <div class="pricing-cards">
+        <div class="pricing-card">
+            <h3>Gratuit</h3>
+            <div class="price">€0 <span>/month</span></div>
+            <div class="price-sub">Free forever</div>
+            <ul class="pricing-features">
+                <li><i data-lucide="check"></i> Unlimited company lookups</li>
+                <li><i data-lucide="check"></i> Basic company profile</li>
+                <li><i data-lucide="check"></i> ANAF fiscal status</li>
+                <li><i data-lucide="check"></i> Invoice verification</li>
+            </ul>
+            <a href="signup.html" class="btn btn-outline-lg" style="border-width:1px">Get started free</a>
+        </div>
+
+        <div class="pricing-card featured">
+            <div class="pricing-popular">Most popular</div>
+            <h3>Esențial</h3>
+            <div class="price">€17 <span>/month</span></div>
+            <div class="price-sub">Billed €204/year · Save 23%</div>
+            <ul class="pricing-features">
+                <li><i data-lucide="check"></i> Everything in Gratuit</li>
+                <li><i data-lucide="check"></i> Financial deep-dives</li>
+                <li><i data-lucide="check"></i> Court case records</li>
+                <li><i data-lucide="check"></i> Shareholder networks</li>
+                <li><i data-lucide="check"></i> Monitoring alerts</li>
+                <li><i data-lucide="check"></i> Sector benchmarks</li>
+            </ul>
+            <a href="signup.html" class="btn btn-primary-lg">Start Esențial — €17/mo</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>&copy; 2024 Termene.ro — Part of Termene Just SRL. All data sourced from official Romanian registries.</p>
+</footer>
+
+<script>
+    lucide.createIcons();
+</script>
+
+</body>
+</html>

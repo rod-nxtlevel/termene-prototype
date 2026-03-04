@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termene.ro: Growth Unlocked — ProductLed Assessment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy: #0A0E1F;
+            --navy-light: #131835;
+            --navy-mid: #1a2040;
+            --blue: #3D7FFF;
+            --blue-hover: #2B6BEE;
+            --blue-glow: rgba(61, 127, 255, 0.12);
+            --green: #10B981;
+            --amber: #F59E0B;
+            --red: #EF4444;
+            --purple: #8B5CF6;
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- SLIDE ENGINE ---- */
+        .deck {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 80px;
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .slide.exit-left {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+
+        .slide-inner {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* ---- CONTROLS ---- */
+        .controls {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+            background: rgba(19, 24, 53, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 8px 12px;
+        }
+
+        .ctrl-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.05);
+            color: var(--gray-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ctrl-btn:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+        .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .ctrl-btn i { width: 20px; height: 20px; }
+
+        .slide-counter {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-400);
+            min-width: 60px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .progress-track {
+            width: 120px;
+            height: 3px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--blue);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        /* ---- TYPOGRAPHY ---- */
+        .slide-label {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--blue);
+            margin-bottom: 16px;
+        }
+
+        .slide-title {
+            font-size: clamp(32px, 4vw, 56px);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+        }
+
+        .slide-subtitle {
+            font-size: clamp(16px, 2vw, 22px);
+            color: var(--gray-400);
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 700px;
+        }
+
+        .slide-headline {
+            font-size: clamp(28px, 3.5vw, 44px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 40px;
+        }
+
+        .highlight { color: var(--blue); }
+        .highlight-green { color: var(--green); }
+        .highlight-amber { color: var(--amber); }
+        .highlight-red { color: var(--red); }
+
+        /* ---- STAT CARDS ---- */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 28px 24px;
+            text-align: center;
+        }
+
+        .stat-card .big {
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .label {
+            font-size: 14px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        /* ---- STEP LIST ---- */
+        .step-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .step-item {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 28px 24px;
+            text-align: center;
+        }
+
+        .step-num {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .step-item h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-item p {
+            font-size: 14px;
+            color: var(--gray-400);
+            line-height: 1.5;
+        }
+
+        /* ---- SCREENSHOT FRAME ---- */
+        .browser-frame {
+            background: var(--navy-mid);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .browser-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .browser-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .browser-dot.r { background: #EF4444; }
+        .browser-dot.y { background: #F59E0B; }
+        .browser-dot.g { background: #10B981; }
+
+        .browser-url {
+            flex: 1;
+            background: rgba(255,255,255,0.04);
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-left: 8px;
+        }
+
+        .browser-frame img {
+            width: 100%;
+            display: block;
+        }
+
+        /* ---- ANNOTATION OVERLAYS ---- */
+        .screenshot-annotated {
+            position: relative;
+        }
+
+        .annotation {
+            position: absolute;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .annotation::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+
+        .annotation.arrow-left::before {
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-right: 8px solid rgba(239, 68, 68, 0.9);
+        }
+
+        .annotation.arrow-down::before {
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid rgba(239, 68, 68, 0.9);
+        }
+
+        /* ---- PROBLEM/GOOD LAYOUT ---- */
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .split-text h2 {
+            font-size: clamp(24px, 3vw, 36px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .split-text p {
+            font-size: 16px;
+            color: var(--gray-400);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .callout-box {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--red);
+        }
+
+        .callout-box.amber {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.2);
+            color: var(--amber);
+        }
+
+        .callout-box.blue {
+            background: rgba(61, 127, 255, 0.08);
+            border-color: rgba(61, 127, 255, 0.2);
+            color: var(--blue);
+        }
+
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+        .score-badge.red { background: rgba(239,68,68,0.1); color: var(--red); }
+        .score-badge.green { background: rgba(16,185,129,0.1); color: var(--green); }
+
+        /* ---- CHECK LIST ---- */
+        .check-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+        .check-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .check-list li .icon { flex-shrink: 0; font-size: 18px; }
+
+        /* ---- SCORECARD ---- */
+        .scorecard {
+            display: grid;
+            gap: 12px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .score-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .score-label {
+            width: 200px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .score-bar-track {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            transition: width 1s ease;
+        }
+
+        .score-bar-fill.red { background: linear-gradient(90deg, rgba(239,68,68,0.3), rgba(239,68,68,0.7)); }
+        .score-bar-fill.amber { background: linear-gradient(90deg, rgba(245,158,11,0.3), rgba(245,158,11,0.7)); }
+        .score-bar-fill.green { background: linear-gradient(90deg, rgba(16,185,129,0.3), rgba(16,185,129,0.7)); }
+
+        .overall-score {
+            text-align: center;
+            margin-top: 24px;
+            padding: 20px;
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+        }
+
+        .overall-score .big {
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            color: var(--amber);
+        }
+
+        .overall-score .tag {
+            font-size: 14px;
+            color: var(--gray-400);
+            margin-top: 4px;
+        }
+
+        /* ---- FUNNEL ---- */
+        .funnel {
+            display: grid;
+            gap: 8px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .funnel-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .funnel-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+        .funnel-icon.ok { background: rgba(16,185,129,0.1); color: var(--green); }
+        .funnel-icon.warn { background: rgba(245,158,11,0.1); color: var(--amber); }
+        .funnel-icon.bad { background: rgba(239,68,68,0.1); color: var(--red); }
+
+        .funnel-text { flex: 1; }
+        .funnel-text .name { font-size: 15px; font-weight: 700; }
+        .funnel-text .desc { font-size: 13px; color: var(--gray-500); }
+
+        .funnel-connector {
+            width: 2px;
+            height: 8px;
+            background: rgba(255,255,255,0.06);
+            margin-left: 37px;
+        }
+
+        /* ---- PREVIEW GRID ---- */
+        .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .preview-item {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        .preview-item:hover { border-color: rgba(61,127,255,0.2); }
+
+        .preview-item .icon-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(61,127,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            color: var(--blue);
+        }
+        .preview-item .icon-wrap i { width: 22px; height: 22px; }
+
+        .preview-item h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .preview-item p {
+            font-size: 13px;
+            color: var(--gray-400);
+            line-height: 1.5;
+        }
+
+        /* ---- QUICK WINS ---- */
+        .wins-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .win-card {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 28px 24px;
+        }
+
+        .win-card .emoji {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .win-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .win-card p {
+            font-size: 14px;
+            color: var(--gray-400);
+            line-height: 1.6;
+        }
+
+        /* ---- ROADMAP ---- */
+        .roadmap-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .roadmap-col {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .roadmap-header {
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .roadmap-header.now { background: rgba(16,185,129,0.06); color: var(--green); }
+        .roadmap-header.mid { background: rgba(61,127,255,0.06); color: var(--blue); }
+        .roadmap-header.later { background: rgba(139,92,246,0.06); color: var(--purple); }
+
+        .roadmap-list {
+            padding: 16px 20px;
+            list-style: none;
+        }
+
+        .roadmap-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--gray-300);
+            line-height: 1.4;
+        }
+        .roadmap-list li::before {
+            content: '•';
+            color: var(--gray-600);
+            flex-shrink: 0;
+            margin-top: -1px;
+        }
+
+        /* ---- METRICS TABLE ---- */
+        .metrics-table {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .metrics-table th {
+            background: rgba(255,255,255,0.03);
+            padding: 14px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray-500);
+            text-align: left;
+        }
+
+        .metrics-table td {
+            padding: 16px 20px;
+            font-size: 16px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .metrics-table td:first-child {
+            font-weight: 600;
+        }
+
+        .metrics-table .today { color: var(--gray-400); }
+        .metrics-table .target { color: var(--green); font-weight: 700; }
+        .metrics-table .arrow-cell { font-size: 18px; color: var(--gray-600); text-align: center; width: 40px; }
+
+        /* ---- CTA SLIDE ---- */
+        .cta-center {
+            text-align: center;
+        }
+
+        .cta-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .cta-step {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 28px 20px;
+            text-align: center;
+        }
+
+        .cta-step .num {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(61,127,255,0.1);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 800;
+            margin: 0 auto 14px;
+        }
+
+        .cta-step h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .cta-step p {
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+
+        .btn-primary-lg {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--blue);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 16px 32px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 0 40px rgba(61,127,255,0.25);
+        }
+        .btn-primary-lg:hover { background: var(--blue-hover); transform: translateY(-2px); }
+
+        .brand-footer {
+            margin-top: 48px;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 900px) {
+            .slide { padding: 40px 24px; }
+            .split-layout { grid-template-columns: 1fr; }
+            .wins-grid, .roadmap-cols, .cta-steps { grid-template-columns: 1fr; }
+            .preview-grid { grid-template-columns: 1fr; }
+            .score-label { width: 140px; font-size: 12px; }
+        }
+
+        @media (max-width: 600px) {
+            .slide { padding: 30px 16px 100px; }
+            .stat-row { grid-template-columns: 1fr; }
+            .step-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+    <!-- ====== SLIDE 1: TITLE ====== -->
+    <div class="slide active" data-slide="1">
+        <div class="slide-inner" style="text-align:center;">
+            <div style="margin-bottom:40px;">
+                <div style="display:inline-flex;align-items:center;gap:12px;background:rgba(61,127,255,0.08);border:1px solid rgba(61,127,255,0.15);border-radius:100px;padding:8px 20px 8px 12px;font-size:14px;color:var(--blue);font-weight:600;margin-bottom:32px;">
+                    <div style="width:8px;height:8px;border-radius:50%;background:var(--green);"></div>
+                    ProductLed Implementation Program
+                </div>
+            </div>
+            <h1 class="slide-title" style="font-size:clamp(40px,5.5vw,72px);margin-bottom:20px;">Termene.ro:<br><span class="highlight">Growth Unlocked</span></h1>
+            <p class="slide-subtitle" style="margin:0 auto 48px;font-size:clamp(18px,2.2vw,24px);">A Product-Led Assessment & UX Redesign</p>
+            <div style="display:flex;align-items:center;justify-content:center;gap:24px;color:var(--gray-500);font-size:14px;">
+                <span>March 2026</span>
+                <span style="width:4px;height:4px;border-radius:50%;background:var(--gray-600);"></span>
+                <span>Confidential</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 2: THE OPPORTUNITY ====== -->
+    <div class="slide" data-slide="2">
+        <div class="slide-inner">
+            <div class="slide-label">The Opportunity</div>
+            <h2 class="slide-headline">A <span class="highlight-green">7/10 product</span> with a <span class="highlight-amber">4/10 go-to-market</span></h2>
+
+            <div class="stat-row">
+                <div class="stat-card">
+                    <div class="big" style="color:var(--blue);">100,000+</div>
+                    <div class="label">Companies as customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="big" style="color:var(--green);">16M RON</div>
+                    <div class="label">Revenue, +19% YoY</div>
+                </div>
+                <div class="stat-card">
+                    <div class="big" style="color:var(--purple);">Enterprise</div>
+                    <div class="label">OMV Petrom · CEC Bank · EY</div>
+                </div>
+            </div>
+
+            <div class="callout-box blue" style="text-align:center;font-size:17px;max-width:700px;margin:0 auto;">
+                The infrastructure is there. The growth motion needs work.
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 3: WHAT WE DID ====== -->
+    <div class="slide" data-slide="3">
+        <div class="slide-inner">
+            <div class="slide-label">Methodology</div>
+            <h2 class="slide-headline">We went through the <span class="highlight">full experience</span></h2>
+
+            <div class="step-list">
+                <div class="step-item">
+                    <span class="step-num">&#x1F50D;</span>
+                    <h3>Explored the website</h3>
+                    <p>Reviewed landing pages, pricing, and public content as a new visitor would.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">&#x1F4DD;</span>
+                    <h3>Created a real account</h3>
+                    <p>Signed up with no special access — experienced the exact same flow as customers.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">&#x1F3E2;</span>
+                    <h3>Explored company profiles</h3>
+                    <p>Searched and analyzed multiple companies through the product interface.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">&#x1F4CA;</span>
+                    <h3>Mapped every friction point</h3>
+                    <p>Documented each obstacle between signup and first value moment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 4: PROBLEM 1 — SIGNUP ====== -->
+    <div class="slide" data-slide="4">
+        <div class="slide-inner">
+            <div class="split-layout">
+                <div class="split-text">
+                    <div class="slide-label" style="color:var(--red);">Problem 1</div>
+                    <h2>The signup sends the <span class="highlight-red">wrong signal</span></h2>
+                    <p>The "Create Account" button routes to <code style="background:rgba(239,68,68,0.1);color:var(--red);padding:2px 8px;border-radius:4px;font-size:14px;">/book-a-meeting-contact</code> — a URL that screams "talk to sales."</p>
+                    <p>The form promises: <em>"In maximum 12 hours you'll be contacted by a consultant."</em></p>
+                    <div class="callout-box">
+                        Users came to try a product, not book a sales call.
+                    </div>
+                </div>
+                <div>
+                    <div class="browser-frame">
+                        <div class="browser-bar">
+                            <div class="browser-dots"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+                            <div class="browser-url">termene.ro/book-a-meeting-contact</div>
+                        </div>
+                        <div class="screenshot-annotated">
+                            <img src="screenshots/02-signup-form-email.png" alt="Signup form">
+                            <div class="annotation arrow-left" style="top:12%;right:4%;font-size:11px;max-width:180px;white-space:normal;line-height:1.3;">Sales signal on a self-service page</div>
+                            <div class="annotation arrow-down" style="bottom:8%;left:4%;font-size:11px;max-width:200px;white-space:normal;line-height:1.3;">URL: /book-a-meeting-contact</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 5: PROBLEM 2 — AI GATE ====== -->
+    <div class="slide" data-slide="5">
+        <div class="slide-inner">
+            <div class="split-layout">
+                <div class="split-text">
+                    <div class="slide-label" style="color:var(--red);">Problem 2</div>
+                    <h2>An AI terms gate <span class="highlight-red">blocks the product</span></h2>
+                    <p>Immediately after signup, users are shown an AI terms & conditions modal. They must accept before accessing any functionality.</p>
+                    <div class="callout-box">
+                        Users didn't sign up for AI. They came to check a company.
+                    </div>
+                </div>
+                <div>
+                    <div class="browser-frame">
+                        <div class="browser-bar">
+                            <div class="browser-dots"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+                            <div class="browser-url">termene.ro/dashboard</div>
+                        </div>
+                        <div class="screenshot-annotated">
+                            <img src="screenshots/05-post-signup-ai-tc-gate.jpg" alt="AI Terms Gate">
+                            <div class="annotation arrow-left" style="top:40%;right:4%;font-size:11px;max-width:190px;white-space:normal;line-height:1.3;">First experience after signup: a legal disclaimer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 6: PROBLEM 3 — WRONG FIRST SCREEN ====== -->
+    <div class="slide" data-slide="6">
+        <div class="slide-inner">
+            <div class="split-layout">
+                <div class="split-text">
+                    <div class="slide-label" style="color:var(--red);">Problem 3</div>
+                    <h2>Wrong <span class="highlight-red">first experience</span></h2>
+                    <p>After navigating past the AI T&C, users land on an AI chatbot — not the company search that is the core product.</p>
+                    <p>This is disorienting. Users came to search for a company, not chat with an AI assistant.</p>
+                    <div class="score-badge red">Onboarding Score: 3/10</div>
+                </div>
+                <div>
+                    <div class="browser-frame">
+                        <div class="browser-bar">
+                            <div class="browser-dots"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+                            <div class="browser-url">termene.ro/ai-chat</div>
+                        </div>
+                        <div class="screenshot-annotated">
+                            <img src="screenshots/07-post-signup-ai-chat-first-screen.jpg" alt="AI Chat First Screen">
+                            <div class="annotation arrow-left" style="top:35%;right:4%;font-size:11px;max-width:190px;white-space:normal;line-height:1.3;">AI chatbot shown instead of company search</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 7: THE GOOD NEWS ====== -->
+    <div class="slide" data-slide="7">
+        <div class="slide-inner">
+            <div class="split-layout">
+                <div class="split-text">
+                    <div class="slide-label" style="color:var(--green);">The Good News</div>
+                    <h2>The product itself? <span class="highlight-green">Genuinely impressive.</span></h2>
+                    <ul class="check-list">
+                        <li><span class="icon">&#x2705;</span> Deep financial data — 10+ years of history</li>
+                        <li><span class="icon">&#x2705;</span> Risk scoring — insolvency, credit, legal</li>
+                        <li><span class="icon">&#x2705;</span> Real-time data from ANAF, ONRC, courts</li>
+                        <li><span class="icon">&#x2705;</span> AI Agents with real business context</li>
+                    </ul>
+                    <div class="score-badge green">Product Score: 7/10</div>
+                </div>
+                <div>
+                    <div class="browser-frame">
+                        <div class="browser-bar">
+                            <div class="browser-dots"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+                            <div class="browser-url">termene.ro/search-results</div>
+                        </div>
+                        <img src="screenshots/09-company-search-results.png" alt="Company search results">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 8: PLG SCORECARD ====== -->
+    <div class="slide" data-slide="8">
+        <div class="slide-inner">
+            <div class="slide-label">Assessment</div>
+            <h2 class="slide-headline" style="text-align:center;">ProductLed <span class="highlight">Readiness Score</span></h2>
+
+            <div class="scorecard">
+                <div class="score-row">
+                    <div class="score-label">Free Model</div>
+                    <div class="score-bar-track"><div class="score-bar-fill amber" style="width:50%;">5</div></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Time to Value</div>
+                    <div class="score-bar-track"><div class="score-bar-fill red" style="width:30%;">3</div></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Viral Loops</div>
+                    <div class="score-bar-track"><div class="score-bar-fill red" style="width:20%;">2</div></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Self-Service</div>
+                    <div class="score-bar-track"><div class="score-bar-fill red" style="width:30%;">3</div></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Product Qualified Leads</div>
+                    <div class="score-bar-track"><div class="score-bar-fill amber" style="width:40%;">4</div></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Pricing Transparency</div>
+                    <div class="score-bar-track"><div class="score-bar-fill green" style="width:70%;">7</div></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">User Experience</div>
+                    <div class="score-bar-track"><div class="score-bar-fill amber" style="width:60%;">6</div></div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Network Effects</div>
+                    <div class="score-bar-track"><div class="score-bar-fill green" style="width:70%;">7</div></div>
+                </div>
+            </div>
+
+            <div class="overall-score">
+                <div class="big">4.6<span style="font-size:24px;color:var(--gray-500);">/10</span></div>
+                <div class="tag">Overall ProductLed Readiness</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 9: THE CORE PROBLEM ====== -->
+    <div class="slide" data-slide="9">
+        <div class="slide-inner">
+            <div class="slide-label">The Core Problem</div>
+            <h2 class="slide-headline" style="text-align:center;">The gap between signup and value is <span class="highlight-red">too wide</span></h2>
+
+            <div class="funnel">
+                <div class="funnel-step">
+                    <div class="funnel-icon warn">&#x26A0;&#xFE0F;</div>
+                    <div class="funnel-text"><div class="name">Landing &rarr; CTA</div><div class="desc">Mixed signals — sales vs. self-service messaging</div></div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-step">
+                    <div class="funnel-icon ok">&#x2705;</div>
+                    <div class="funnel-text"><div class="name">Signup Form</div><div class="desc">OK — email only, fast OTP verification</div></div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-step">
+                    <div class="funnel-icon bad">&#x274C;</div>
+                    <div class="funnel-text"><div class="name">Post-Signup</div><div class="desc">AI Terms & Conditions gate blocks progress</div></div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-step">
+                    <div class="funnel-icon bad">&#x274C;</div>
+                    <div class="funnel-text"><div class="name">First Screen</div><div class="desc">AI chatbot shown instead of core product (search)</div></div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-step">
+                    <div class="funnel-icon ok">&#x2705;</div>
+                    <div class="funnel-text"><div class="name">Company Search</div><div class="desc">Clean, fast, good results</div></div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-step">
+                    <div class="funnel-icon ok">&#x2705;</div>
+                    <div class="funnel-text"><div class="name">Company Profile</div><div class="desc">Excellent — deep data, well structured</div></div>
+                </div>
+                <div class="funnel-connector"></div>
+                <div class="funnel-step">
+                    <div class="funnel-icon bad">&#x274C;</div>
+                    <div class="funnel-text"><div class="name">Upgrade</div><div class="desc">Routes to consultant — no self-service checkout</div></div>
+                </div>
+            </div>
+
+            <div class="callout-box" style="text-align:center;max-width:500px;margin:24px auto 0;font-size:16px;">
+                4+ friction points before first value
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 10: THE FIX ====== -->
+    <div class="slide" data-slide="10">
+        <div class="slide-inner">
+            <div class="slide-label">The Redesign</div>
+            <h2 class="slide-headline" style="text-align:center;">What the <span class="highlight">ideal experience</span> looks like</h2>
+
+            <div class="preview-grid">
+                <div class="preview-item">
+                    <div class="icon-wrap"><i data-lucide="layout"></i></div>
+                    <h4>New Landing Page</h4>
+                    <p>Value-first hero, product preview with blurred data teaser, clear self-service CTA.</p>
+                </div>
+                <div class="preview-item">
+                    <div class="icon-wrap"><i data-lucide="user-plus"></i></div>
+                    <h4>New Signup Flow</h4>
+                    <p>Google SSO, 3 clean steps, no mention of consultants. Account ready in 30 seconds.</p>
+                </div>
+                <div class="preview-item">
+                    <div class="icon-wrap"><i data-lucide="search"></i></div>
+                    <h4>New Dashboard</h4>
+                    <p>Search is the hero. "Find your first company" — value in under 60 seconds.</p>
+                </div>
+                <div class="preview-item">
+                    <div class="icon-wrap"><i data-lucide="building-2"></i></div>
+                    <h4>New Company Profile</h4>
+                    <p>Free sections open, locked sections tastefully blurred with self-service upgrade.</p>
+                </div>
+            </div>
+
+            <div style="text-align:center;margin-top:32px;">
+                <a href="index.html" class="btn-primary-lg">View live prototype <i data-lucide="arrow-right" style="width:18px;height:18px;"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 11: TOP 3 QUICK WINS ====== -->
+    <div class="slide" data-slide="11">
+        <div class="slide-inner">
+            <div class="slide-label">Quick Wins</div>
+            <h2 class="slide-headline" style="text-align:center;">3 changes that unlock growth <span class="highlight-green">immediately</span></h2>
+
+            <div class="wins-grid">
+                <div class="win-card">
+                    <span class="emoji">&#x1F3AF;</span>
+                    <h3>Fix the first experience</h3>
+                    <p>After signup &rarr; company search, pre-loaded with their own company. Goal: value in &lt;60 seconds.</p>
+                </div>
+                <div class="win-card">
+                    <span class="emoji">&#x1F4B3;</span>
+                    <h3>Add self-service checkout</h3>
+                    <p>Remove consultant requirement for Esen&#x21B;ial (&euro;17/mo). Credit card purchase. Keep consultants for Avansat+ only.</p>
+                </div>
+                <div class="win-card">
+                    <span class="emoji">&#x1F504;</span>
+                    <h3>Make Redbill the viral hook</h3>
+                    <p>Free invoice reporting = data network effect. More reporters &rarr; more valuable data &rarr; more signups.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 12: ROADMAP ====== -->
+    <div class="slide" data-slide="12">
+        <div class="slide-inner">
+            <div class="slide-label">Implementation</div>
+            <h2 class="slide-headline" style="text-align:center;"><span class="highlight">90-day</span> roadmap</h2>
+
+            <div class="roadmap-cols">
+                <div class="roadmap-col">
+                    <div class="roadmap-header now">Quick Wins &middot; &lt;30 days</div>
+                    <ul class="roadmap-list">
+                        <li>Fix landing page CTA</li>
+                        <li>Add Google SSO</li>
+                        <li>Remove AI T&C gate</li>
+                        <li>OTP as copyable text</li>
+                        <li>Progress bar during signup</li>
+                        <li>Search as first screen</li>
+                    </ul>
+                </div>
+                <div class="roadmap-col">
+                    <div class="roadmap-header mid">Medium Term &middot; 30–90 days</div>
+                    <ul class="roadmap-list">
+                        <li>Guided product tour</li>
+                        <li>Self-service Stripe checkout</li>
+                        <li>14-day Esen&#x21B;ial trial</li>
+                        <li>PQL tracking &amp; scoring</li>
+                        <li>Upgrade prompts in-product</li>
+                    </ul>
+                </div>
+                <div class="roadmap-col">
+                    <div class="roadmap-header later">Long Term &middot; 90+ days</div>
+                    <ul class="roadmap-list">
+                        <li>Embeddable widgets</li>
+                        <li>API-first PLG</li>
+                        <li>Team workspaces</li>
+                        <li>Referral program</li>
+                        <li>Redbill viral loop</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 13: EXPECTED IMPACT ====== -->
+    <div class="slide" data-slide="13">
+        <div class="slide-inner">
+            <div class="slide-label">Expected Impact</div>
+            <h2 class="slide-headline" style="text-align:center;">What <span class="highlight-green">moving the needle</span> looks like</h2>
+
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Today (Est.)</th>
+                        <th></th>
+                        <th>Target</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Signup &rarr; First Search</td>
+                        <td class="today">~30%</td>
+                        <td class="arrow-cell">&rarr;</td>
+                        <td class="target">80%+</td>
+                    </tr>
+                    <tr>
+                        <td>Free &rarr; Paid Conversion</td>
+                        <td class="today">~2%</td>
+                        <td class="arrow-cell">&rarr;</td>
+                        <td class="target">5–8%</td>
+                    </tr>
+                    <tr>
+                        <td>Time to First Value</td>
+                        <td class="today">5+ min</td>
+                        <td class="arrow-cell">&rarr;</td>
+                        <td class="target">&lt;60 sec</td>
+                    </tr>
+                    <tr>
+                        <td>Self-Service Revenue</td>
+                        <td class="today">~0%</td>
+                        <td class="arrow-cell">&rarr;</td>
+                        <td class="target">30%+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ====== SLIDE 14: THANK YOU ====== -->
+    <div class="slide" data-slide="14">
+        <div class="slide-inner cta-center">
+            <div class="slide-label">Next Steps</div>
+            <h2 class="slide-title" style="font-size:clamp(32px,4.5vw,56px);">Ready to build your<br><span class="highlight">PLG flywheel?</span></h2>
+
+            <div class="cta-steps">
+                <div class="cta-step">
+                    <div class="num">1</div>
+                    <h4>Review the prototype</h4>
+                    <p>Click through the redesigned flow</p>
+                </div>
+                <div class="cta-step">
+                    <div class="num">2</div>
+                    <h4>Prioritize quick wins</h4>
+                    <p>Pick the highest-impact changes</p>
+                </div>
+                <div class="cta-step">
+                    <div class="num">3</div>
+                    <h4>Schedule kickoff</h4>
+                    <p>Let's start the 90-day sprint</p>
+                </div>
+            </div>
+
+            <div style="margin-top:32px;">
+                <a href="index.html" class="btn-primary-lg">Open prototype <i data-lucide="arrow-right" style="width:18px;height:18px;"></i></a>
+            </div>
+
+            <div class="brand-footer">
+                ProductLed Implementation Program &middot; Confidential &middot; March 2026
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+    <button class="ctrl-btn" id="prevBtn" onclick="prev()" disabled>
+        <i data-lucide="chevron-left"></i>
+    </button>
+
+    <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:7.14%;"></div>
+    </div>
+
+    <div class="slide-counter" id="slideCounter">1 / 14</div>
+
+    <button class="ctrl-btn" id="nextBtn" onclick="next()">
+        <i data-lucide="chevron-right"></i>
+    </button>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    const TOTAL = 14;
+    let current = 1;
+
+    function goTo(n) {
+        if (n < 1 || n > TOTAL || n === current) return;
+
+        const oldSlide = document.querySelector(`.slide[data-slide="${current}"]`);
+        const newSlide = document.querySelector(`.slide[data-slide="${n}"]`);
+
+        // Determine direction
+        const goingForward = n > current;
+
+        // Remove active from old
+        oldSlide.classList.remove('active');
+        oldSlide.classList.add(goingForward ? 'exit-left' : '');
+        oldSlide.style.transform = goingForward ? 'translateX(-60px)' : 'translateX(60px)';
+        oldSlide.style.opacity = '0';
+
+        // Prep new slide
+        newSlide.style.transform = goingForward ? 'translateX(60px)' : 'translateX(-60px)';
+        newSlide.style.opacity = '0';
+
+        // Force reflow
+        void newSlide.offsetWidth;
+
+        // Animate in
+        newSlide.classList.add('active');
+        newSlide.style.transform = 'translateX(0)';
+        newSlide.style.opacity = '1';
+
+        // Clean up old
+        setTimeout(() => {
+            oldSlide.classList.remove('exit-left');
+            oldSlide.style.transform = '';
+            oldSlide.style.opacity = '';
+        }, 500);
+
+        current = n;
+        updateControls();
+        lucide.createIcons();
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    function updateControls() {
+        document.getElementById('prevBtn').disabled = current === 1;
+        document.getElementById('nextBtn').disabled = current === TOTAL;
+        document.getElementById('slideCounter').textContent = `${current} / ${TOTAL}`;
+        document.getElementById('progressFill').style.width = `${(current / TOTAL) * 100}%`;
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+    });
+
+    // Touch swipe
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+            diff > 0 ? next() : prev();
+        }
+    });
+</script>
+
+</body>
+</html>

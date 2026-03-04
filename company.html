@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termene Just SRL — Termene.ro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy: #0A0E1F;
+            --navy-light: #131835;
+            --navy-mid: #1a2040;
+            --blue: #3D7FFF;
+            --blue-hover: #2B6BEE;
+            --green: #10B981;
+            --amber: #F59E0B;
+            --red: #EF4444;
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            background: rgba(10, 14, 31, 0.95);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 16px; }
+        .nav-logo {
+            font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+            color: var(--white); text-decoration: none;
+        }
+        .nav-logo span { color: var(--blue); }
+
+        .nav-back {
+            display: flex; align-items: center; gap: 6px;
+            color: var(--gray-400); text-decoration: none; font-size: 14px; font-weight: 500;
+            padding: 6px 12px; border-radius: 8px; transition: all 0.2s;
+        }
+        .nav-back:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+        .nav-back i { width: 16px; height: 16px; }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+
+        .nav-upgrade {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 16px; font-size: 13px; font-weight: 600;
+            color: var(--blue); background: rgba(61,127,255,0.08);
+            border: 1px solid rgba(61,127,255,0.15); border-radius: 8px;
+            text-decoration: none; transition: all 0.2s; cursor: pointer;
+        }
+        .nav-upgrade:hover { background: rgba(61,127,255,0.12); }
+        .nav-upgrade i { width: 14px; height: 14px; }
+
+        .avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), #6366F1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; cursor: pointer;
+        }
+
+        /* ---- MAIN ---- */
+        .page { max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+
+        /* ---- COMPANY HEADER ---- */
+        .company-header {
+            margin-bottom: 32px;
+        }
+
+        .company-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .company-name-group h1 {
+            font-size: clamp(24px, 3vw, 32px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
+        .status-badge.active { background: rgba(16,185,129,0.1); color: var(--green); }
+        .status-badge i { width: 14px; height: 14px; }
+
+        .company-meta {
+            font-size: 14px;
+            color: var(--gray-400);
+            margin-top: 6px;
+        }
+
+        .company-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-icon {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
+            color: var(--gray-300); cursor: pointer; transition: all 0.2s;
+            font-family: inherit; text-decoration: none;
+        }
+        .btn-icon:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: var(--white); }
+        .btn-icon i { width: 16px; height: 16px; }
+
+        /* ---- QUICK STATS ---- */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--navy-light);
+            padding: 24px 20px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .stat-value .unit { font-size: 14px; font-weight: 500; color: var(--gray-400); }
+
+        .stat-change {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .stat-change.positive { color: var(--green); }
+        .stat-change.neutral { color: var(--gray-500); }
+        .stat-change i { width: 14px; height: 14px; }
+
+        /* ---- RISK CARDS ---- */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .risk-card {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .risk-label {
+            font-size: 12px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .risk-label i { width: 14px; height: 14px; }
+
+        .risk-value {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .risk-sub {
+            font-size: 13px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+
+        .risk-card.green { border-left: 3px solid var(--green); }
+        .risk-card.green .risk-value { color: var(--green); }
+        .risk-card.blue { border-left: 3px solid var(--blue); }
+        .risk-card.blue .risk-value { color: var(--blue); }
+
+        /* ---- SECTIONS ---- */
+        .section {
+            background: var(--navy-light);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .section-header:hover { background: rgba(255,255,255,0.02); }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .section-title i { width: 20px; height: 20px; color: var(--blue); }
+        .section-title .free-badge {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(16,185,129,0.1);
+            color: var(--green);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .section-toggle {
+            color: var(--gray-500);
+            transition: transform 0.2s;
+        }
+        .section-toggle i { width: 20px; height: 20px; }
+
+        .section-body {
+            padding: 0 24px 24px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .detail-value .check { color: var(--green); }
+        .detail-value .warn { color: var(--amber); }
+        .detail-value a { color: var(--blue); text-decoration: none; }
+        .detail-value a:hover { text-decoration: underline; }
+
+        /* ---- LOCKED SECTIONS ---- */
+        .section.locked {
+            position: relative;
+        }
+
+        .locked-body {
+            position: relative;
+            min-height: 200px;
+            overflow: hidden;
+        }
+
+        .locked-blur {
+            filter: blur(6px);
+            user-select: none;
+            pointer-events: none;
+            padding: 0 24px 24px;
+        }
+
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 14, 31, 0.5);
+            backdrop-filter: blur(2px);
+            text-align: center;
+            padding: 24px;
+        }
+
+        .locked-overlay .lock-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(61,127,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+            margin-bottom: 16px;
+        }
+        .locked-overlay .lock-icon i { width: 22px; height: 22px; }
+
+        .locked-overlay h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .locked-overlay p {
+            font-size: 14px;
+            color: var(--gray-400);
+            margin-bottom: 20px;
+        }
+
+        .btn-unlock {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--blue);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-unlock:hover { background: var(--blue-hover); transform: translateY(-1px); }
+        .btn-unlock i { width: 16px; height: 16px; }
+
+        /* ---- CHART PLACEHOLDER ---- */
+        .chart-placeholder {
+            height: 240px;
+            position: relative;
+        }
+
+        /* ---- COURT CASES PLACEHOLDER ---- */
+        .case-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .case-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .case-dot.amber { background: var(--amber); }
+        .case-dot.green { background: var(--green); }
+        .case-dot.red { background: var(--red); }
+
+        .case-text {
+            flex: 1;
+        }
+
+        .case-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+        .case-detail { font-size: 12px; color: var(--gray-500); }
+
+        .case-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .case-badge.active { background: rgba(245,158,11,0.1); color: var(--amber); }
+        .case-badge.closed { background: rgba(16,185,129,0.1); color: var(--green); }
+
+        /* ---- NETWORK PLACEHOLDER ---- */
+        .network-placeholder {
+            height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(61,127,255,0.1);
+            border: 2px solid rgba(61,127,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--blue);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .network-line {
+            position: absolute;
+            height: 2px;
+            background: rgba(61,127,255,0.15);
+            transform-origin: left center;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .company-top { flex-direction: column; }
+            .company-actions { width: 100%; }
+            .company-actions > * { flex: 1; justify-content: center; }
+            .quick-stats { grid-template-columns: repeat(2, 1fr); }
+            .risk-grid { grid-template-columns: repeat(2, 1fr); }
+            .detail-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .risk-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ---- UPGRADE MODAL ---- */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 200;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center; padding: 24px;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal-card {
+            background: var(--navy-light); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px; max-width: 520px; width: 100%; max-height: 90vh;
+            overflow-y: auto; padding: 40px; position: relative;
+        }
+
+        .modal-close {
+            position: absolute; top: 16px; right: 16px;
+            background: none; border: none; color: var(--gray-500); cursor: pointer; padding: 4px;
+        }
+        .modal-close:hover { color: var(--white); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-left">
+        <a href="index.html" class="nav-logo">termene<span>.ro</span></a>
+        <a href="dashboard.html" class="nav-back"><i data-lucide="arrow-left"></i> Back to search</a>
+    </div>
+    <div class="nav-right">
+        <a class="nav-upgrade" onclick="openModal()"><i data-lucide="zap"></i> <span>Upgrade</span></a>
+        <div class="avatar">A</div>
+    </div>
+</nav>
+
+<main class="page">
+
+    <!-- COMPANY HEADER -->
+    <div class="company-header">
+        <div class="company-top">
+            <div class="company-name-group">
+                <h1>
+                    Termene Just SRL
+                    <span class="status-badge active"><i data-lucide="check-circle"></i> Active</span>
+                </h1>
+                <div class="company-meta">CUI: 34567890 · J40/12345/2014 · București, Sector 1</div>
+            </div>
+            <div class="company-actions">
+                <button class="btn-icon"><i data-lucide="bookmark"></i> Save</button>
+                <button class="btn-icon"><i data-lucide="bell"></i> Monitor</button>
+                <button class="btn-icon"><i data-lucide="download"></i> Export</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div class="quick-stats">
+        <div class="stat-card">
+            <div class="stat-label">Revenue</div>
+            <div class="stat-value">16M <span class="unit">RON</span></div>
+            <div class="stat-change positive"><i data-lucide="trending-up"></i> +19% YoY</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Profit</div>
+            <div class="stat-value">2.1M <span class="unit">RON</span></div>
+            <div class="stat-change positive"><i data-lucide="trending-up"></i> +12% YoY</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Employees</div>
+            <div class="stat-value">48</div>
+            <div class="stat-change positive"><i data-lucide="trending-up"></i> +50% YoY</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Founded</div>
+            <div class="stat-value">2014</div>
+            <div class="stat-change neutral">10 years</div>
+        </div>
+    </div>
+
+    <!-- RISK CARDS -->
+    <div class="risk-grid">
+        <div class="risk-card green">
+            <div class="risk-label"><i data-lucide="shield-check"></i> Commercial Risk</div>
+            <div class="risk-value">Low · 9.3/10</div>
+            <div class="risk-sub">Very reliable business partner</div>
+        </div>
+        <div class="risk-card blue">
+            <div class="risk-label"><i data-lucide="wallet"></i> Payment Capacity</div>
+            <div class="risk-value">595,541 RON</div>
+            <div class="risk-sub">Strong payment ability</div>
+        </div>
+        <div class="risk-card green">
+            <div class="risk-label"><i data-lucide="activity"></i> Insolvency Rating</div>
+            <div class="risk-value">Class A · 0.04%</div>
+            <div class="risk-sub">Minimal insolvency risk</div>
+        </div>
+        <div class="risk-card green">
+            <div class="risk-label"><i data-lucide="scale"></i> Legal Risk</div>
+            <div class="risk-value">Low</div>
+            <div class="risk-sub">No significant legal issues</div>
+        </div>
+    </div>
+
+    <!-- FREE: COMPANY DETAILS -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+                <i data-lucide="building-2"></i>
+                Company Details
+                <span class="free-badge">Free</span>
+            </div>
+            <div class="section-toggle"><i data-lucide="chevron-up"></i></div>
+        </div>
+        <div class="section-body">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">CUI / Tax ID</div>
+                    <div class="detail-value">34567890</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Registration Number</div>
+                    <div class="detail-value">J40/12345/2014</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">CAEN Code</div>
+                    <div class="detail-value">6201 — Custom software development</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Company Type</div>
+                    <div class="detail-value">SRL (Limited Liability)</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value"><span class="check">● Active</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Date Founded</div>
+                    <div class="detail-value">15 March 2014</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FREE: FISCAL INFORMATION -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+                <i data-lucide="receipt"></i>
+                Fiscal Information
+                <span class="free-badge">Free</span>
+            </div>
+            <div class="section-toggle"><i data-lucide="chevron-up"></i></div>
+        </div>
+        <div class="section-body">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">VAT Payer</div>
+                    <div class="detail-value"><span class="check">&#10003; Yes</span> — RO34567890</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">ANAF Status</div>
+                    <div class="detail-value"><span class="check">&#10003; Active — No issues</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Tax Debts</div>
+                    <div class="detail-value"><span class="check">&#10003; No debts recorded</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Split VAT</div>
+                    <div class="detail-value">Not applicable</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Inactive Status</div>
+                    <div class="detail-value"><span class="check">&#10003; Not inactive</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Last ANAF Check</div>
+                    <div class="detail-value">Today, 14:32</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FREE: ADDRESS -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+                <i data-lucide="map-pin"></i>
+                Address
+                <span class="free-badge">Free</span>
+            </div>
+            <div class="section-toggle"><i data-lucide="chevron-up"></i></div>
+        </div>
+        <div class="section-body">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Registered Address</div>
+                    <div class="detail-value">Str. Academiei Nr. 39, Et. 2, Sector 1, București, 010013</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">County</div>
+                    <div class="detail-value">București</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FREE: CONTACT -->
+    <div class="section">
+        <div class="section-header" onclick="toggleSection(this)">
+            <div class="section-title">
+                <i data-lucide="phone"></i>
+                Contact Information
+                <span class="free-badge">Free</span>
+            </div>
+            <div class="section-toggle"><i data-lucide="chevron-up"></i></div>
+        </div>
+        <div class="section-body">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value">+40 21 345 6789</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value"><a href="#">office@termenejust.ro</a></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Website</div>
+                    <div class="detail-value"><a href="#">www.termenejust.ro</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCKED: FINANCIAL ANALYSIS -->
+    <div class="section locked">
+        <div class="section-header">
+            <div class="section-title">
+                <i data-lucide="bar-chart-3"></i>
+                Financial Analysis
+                <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;background:rgba(61,127,255,0.1);color:var(--blue);padding:2px 8px;border-radius:4px;">Esențial</span>
+            </div>
+        </div>
+        <div class="locked-body">
+            <div class="locked-blur">
+                <div class="chart-placeholder">
+                    <canvas id="blurredChart1"></canvas>
+                </div>
+            </div>
+            <div class="locked-overlay">
+                <div class="lock-icon"><i data-lucide="lock"></i></div>
+                <h3>Financial Analysis</h3>
+                <p>Revenue trends, profitability ratios & balance sheet data</p>
+                <a class="btn-unlock" onclick="openModal()"><i data-lucide="zap"></i> Unlock with Esențial</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCKED: COURT CASES -->
+    <div class="section locked">
+        <div class="section-header">
+            <div class="section-title">
+                <i data-lucide="scale"></i>
+                Court Cases
+                <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;background:rgba(61,127,255,0.1);color:var(--blue);padding:2px 8px;border-radius:4px;">Esențial</span>
+                <span style="font-size:12px;font-weight:600;color:var(--amber);margin-left:4px;">30 cases found</span>
+            </div>
+        </div>
+        <div class="locked-body">
+            <div class="locked-blur">
+                <div class="case-row">
+                    <div class="case-dot amber"></div>
+                    <div class="case-text">
+                        <div class="case-title">Dosar Nr. 12345/3/2023</div>
+                        <div class="case-detail">Tribunalul București — Litigiu comercial</div>
+                    </div>
+                    <div class="case-badge active">Active</div>
+                </div>
+                <div class="case-row">
+                    <div class="case-dot green"></div>
+                    <div class="case-text">
+                        <div class="case-title">Dosar Nr. 67890/3/2022</div>
+                        <div class="case-detail">Judecătoria Sector 1 — Pretenții</div>
+                    </div>
+                    <div class="case-badge closed">Closed</div>
+                </div>
+                <div class="case-row">
+                    <div class="case-dot amber"></div>
+                    <div class="case-text">
+                        <div class="case-title">Dosar Nr. 11223/3/2023</div>
+                        <div class="case-detail">Curtea de Apel București — Recurs</div>
+                    </div>
+                    <div class="case-badge active">Active</div>
+                </div>
+                <div class="case-row">
+                    <div class="case-dot green"></div>
+                    <div class="case-text">
+                        <div class="case-title">Dosar Nr. 44556/3/2021</div>
+                        <div class="case-detail">Tribunalul București — Insolvență</div>
+                    </div>
+                    <div class="case-badge closed">Closed</div>
+                </div>
+            </div>
+            <div class="locked-overlay">
+                <div class="lock-icon"><i data-lucide="lock"></i></div>
+                <h3>Court Cases</h3>
+                <p>30 cases found — view full litigation history</p>
+                <a class="btn-unlock" onclick="openModal()"><i data-lucide="zap"></i> Unlock with Esențial</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCKED: SHAREHOLDER NETWORK -->
+    <div class="section locked">
+        <div class="section-header">
+            <div class="section-title">
+                <i data-lucide="users"></i>
+                Shareholder Network
+                <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;background:rgba(61,127,255,0.1);color:var(--blue);padding:2px 8px;border-radius:4px;">Esențial</span>
+            </div>
+        </div>
+        <div class="locked-body">
+            <div class="locked-blur">
+                <div class="network-placeholder">
+                    <div class="network-node" style="top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-color:rgba(61,127,255,0.4);">TJ SRL</div>
+                    <div class="network-node" style="top:10%;left:20%;">Assoc. A</div>
+                    <div class="network-node" style="top:10%;right:20%;">Assoc. B</div>
+                    <div class="network-node" style="bottom:10%;left:15%;">Related 1</div>
+                    <div class="network-node" style="bottom:10%;right:15%;">Related 2</div>
+                    <div class="network-node" style="bottom:10%;left:50%;transform:translateX(-50%);">Related 3</div>
+                </div>
+            </div>
+            <div class="locked-overlay">
+                <div class="lock-icon"><i data-lucide="lock"></i></div>
+                <h3>Shareholder Network</h3>
+                <p>Ownership structure & related entities</p>
+                <a class="btn-unlock" onclick="openModal()"><i data-lucide="zap"></i> Unlock with Esențial</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCKED: SECTOR COMPARISON -->
+    <div class="section locked">
+        <div class="section-header">
+            <div class="section-title">
+                <i data-lucide="git-compare"></i>
+                Sector Comparison
+                <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;background:rgba(61,127,255,0.1);color:var(--blue);padding:2px 8px;border-radius:4px;">Esențial</span>
+            </div>
+        </div>
+        <div class="locked-body">
+            <div class="locked-blur">
+                <div class="chart-placeholder">
+                    <canvas id="blurredChart2"></canvas>
+                </div>
+            </div>
+            <div class="locked-overlay">
+                <div class="lock-icon"><i data-lucide="lock"></i></div>
+                <h3>Sector Comparison</h3>
+                <p>See how this company ranks against industry peers</p>
+                <a class="btn-unlock" onclick="openModal()"><i data-lucide="zap"></i> Unlock with Esențial</a>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- UPGRADE MODAL -->
+<div class="modal-overlay" id="upgradeModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeModal()"><i data-lucide="x" style="width:20px;height:20px"></i></button>
+
+        <div style="text-align:center; margin-bottom:32px;">
+            <div style="width:56px;height:56px;border-radius:14px;background:rgba(61,127,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--blue);">
+                <i data-lucide="zap" style="width:28px;height:28px"></i>
+            </div>
+            <h2 style="font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;">Get the full picture on any Romanian company</h2>
+            <p style="color:var(--gray-400);font-size:15px;">Unlock premium data for smarter business decisions.</p>
+        </div>
+
+        <div style="display:grid; gap:12px; margin-bottom:32px;">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;">
+                <i data-lucide="bar-chart-3" style="width:18px;height:18px;color:var(--blue);flex-shrink:0;"></i>
+                <div><span style="font-size:14px;font-weight:600;">Financial deep-dives</span><br><span style="font-size:12px;color:var(--gray-500);">10 years of revenue, profit & balance sheets</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;">
+                <i data-lucide="scale" style="width:18px;height:18px;color:var(--amber);flex-shrink:0;"></i>
+                <div><span style="font-size:14px;font-weight:600;">Court case records</span><br><span style="font-size:12px;color:var(--gray-500);">Full litigation history & active cases</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;">
+                <i data-lucide="users" style="width:18px;height:18px;color:var(--green);flex-shrink:0;"></i>
+                <div><span style="font-size:14px;font-weight:600;">Shareholder connections</span><br><span style="font-size:12px;color:var(--gray-500);">Ownership networks & related entities</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;">
+                <i data-lucide="bell" style="width:18px;height:18px;color:#8B5CF6;flex-shrink:0;"></i>
+                <div><span style="font-size:14px;font-weight:600;">Monitoring alerts</span><br><span style="font-size:12px;color:var(--gray-500);">Real-time notifications on changes</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;">
+                <i data-lucide="git-compare" style="width:18px;height:18px;color:var(--green);flex-shrink:0;"></i>
+                <div><span style="font-size:14px;font-weight:600;">Sector benchmarks</span><br><span style="font-size:12px;color:var(--gray-500);">Compare against industry peers</span></div>
+            </div>
+        </div>
+
+        <!-- PRICING TOGGLE -->
+        <div style="display:flex;gap:12px;margin-bottom:24px;">
+            <div class="pricing-opt" data-plan="annual" onclick="selectPricing(this)" style="flex:1;padding:16px;background:rgba(61,127,255,0.08);border:2px solid var(--blue);border-radius:12px;cursor:pointer;text-align:center;">
+                <div style="font-size:13px;color:var(--blue);font-weight:600;margin-bottom:4px;">Annual · Save 23%</div>
+                <div style="font-size:28px;font-weight:800;">€17<span style="font-size:14px;font-weight:500;color:var(--gray-400)">/mo</span></div>
+                <div style="font-size:12px;color:var(--gray-500);">Billed €204/year</div>
+            </div>
+            <div class="pricing-opt" data-plan="monthly" onclick="selectPricing(this)" style="flex:1;padding:16px;background:rgba(255,255,255,0.02);border:2px solid rgba(255,255,255,0.08);border-radius:12px;cursor:pointer;text-align:center;">
+                <div style="font-size:13px;color:var(--gray-400);font-weight:600;margin-bottom:4px;">Monthly</div>
+                <div style="font-size:28px;font-weight:800;">€22<span style="font-size:14px;font-weight:500;color:var(--gray-400)">/mo</span></div>
+                <div style="font-size:12px;color:var(--gray-500);">Billed monthly</div>
+            </div>
+        </div>
+
+        <!-- MOCK CARD FORM -->
+        <div style="margin-bottom:24px;">
+            <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-300);margin-bottom:8px;">Card number</label>
+            <input type="text" placeholder="4242 4242 4242 4242" style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:inherit;font-size:15px;outline:none;margin-bottom:12px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-300);margin-bottom:8px;">Expiry</label>
+                    <input type="text" placeholder="MM/YY" style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:inherit;font-size:15px;outline:none;">
+                </div>
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-300);margin-bottom:8px;">CVC</label>
+                    <input type="text" placeholder="123" style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:inherit;font-size:15px;outline:none;">
+                </div>
+            </div>
+        </div>
+
+        <button id="upgradeBtn" style="width:100%;padding:16px;background:var(--blue);color:var(--white);border:none;border-radius:12px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#2B6BEE'" onmouseout="this.style.background='var(--blue)'">
+            Start Esențial — €17/month
+        </button>
+
+        <p style="text-align:center;font-size:12px;color:var(--gray-600);margin-top:16px;">
+            Questions? <a href="#" style="color:var(--gray-400);text-decoration:underline;">Talk to us</a> · Cancel anytime
+        </p>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    // Toggle sections
+    function toggleSection(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector('.section-toggle i');
+        if (body.style.display === 'none') {
+            body.style.display = 'block';
+            icon.setAttribute('data-lucide', 'chevron-up');
+        } else {
+            body.style.display = 'none';
+            icon.setAttribute('data-lucide', 'chevron-down');
+        }
+        lucide.createIcons();
+    }
+
+    // Modal
+    function openModal() {
+        document.getElementById('upgradeModal').classList.add('open');
+        lucide.createIcons();
+    }
+    function closeModal() {
+        document.getElementById('upgradeModal').classList.remove('open');
+    }
+    document.getElementById('upgradeModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('upgradeModal')) closeModal();
+    });
+
+    // Pricing selection
+    function selectPricing(el) {
+        document.querySelectorAll('.pricing-opt').forEach(opt => {
+            opt.style.borderColor = 'rgba(255,255,255,0.08)';
+            opt.style.background = 'rgba(255,255,255,0.02)';
+        });
+        el.style.borderColor = 'var(--blue)';
+        el.style.background = 'rgba(61,127,255,0.08)';
+
+        const plan = el.getAttribute('data-plan');
+        const btn = document.getElementById('upgradeBtn');
+        btn.textContent = plan === 'annual' ? 'Start Esențial — €17/month' : 'Start Esențial — €22/month';
+    }
+
+    // Draw blurred charts
+    function drawBlurredCharts() {
+        // Revenue chart
+        const ctx1 = document.getElementById('blurredChart1');
+        if (ctx1) {
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+                    datasets: [{
+                        label: 'Revenue (M RON)',
+                        data: [5.2, 7.1, 8.4, 10.8, 13.5, 16.0],
+                        backgroundColor: 'rgba(61, 127, 255, 0.6)',
+                        borderRadius: 4,
+                    }, {
+                        label: 'Profit (M RON)',
+                        data: [0.8, 1.0, 1.2, 1.5, 1.9, 2.1],
+                        backgroundColor: 'rgba(16, 185, 129, 0.6)',
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#475569' } },
+                        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#475569' } }
+                    }
+                }
+            });
+        }
+
+        // Sector chart
+        const ctx2 = document.getElementById('blurredChart2');
+        if (ctx2) {
+            new Chart(ctx2, {
+                type: 'radar',
+                data: {
+                    labels: ['Revenue', 'Profitability', 'Growth', 'Employees', 'Market Share', 'Stability'],
+                    datasets: [{
+                        label: 'Termene Just SRL',
+                        data: [75, 82, 90, 60, 45, 88],
+                        borderColor: 'rgba(61, 127, 255, 0.8)',
+                        backgroundColor: 'rgba(61, 127, 255, 0.15)',
+                        pointBackgroundColor: 'rgba(61, 127, 255, 0.8)',
+                    }, {
+                        label: 'Industry Average',
+                        data: [60, 55, 50, 50, 50, 65],
+                        borderColor: 'rgba(148, 163, 184, 0.5)',
+                        backgroundColor: 'rgba(148, 163, 184, 0.05)',
+                        pointBackgroundColor: 'rgba(148, 163, 184, 0.5)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        r: {
+                            grid: { color: 'rgba(255,255,255,0.06)' },
+                            angleLines: { color: 'rgba(255,255,255,0.06)' },
+                            pointLabels: { color: '#475569', font: { size: 11 } },
+                            ticks: { display: false },
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    drawBlurredCharts();
+</script>
+
+</body>
+</html>

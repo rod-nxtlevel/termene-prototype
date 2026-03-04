@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — Termene.ro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy: #0A0E1F;
+            --navy-light: #131835;
+            --navy-mid: #1a2040;
+            --blue: #3D7FFF;
+            --blue-hover: #2B6BEE;
+            --green: #10B981;
+            --amber: #F59E0B;
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            padding: 0 24px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--white);
+            text-decoration: none;
+        }
+        .nav-logo span { color: var(--blue); }
+
+        .nav-login {
+            font-size: 14px;
+            color: var(--gray-400);
+        }
+        .nav-login a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .nav-login a:hover { text-decoration: underline; }
+
+        /* ---- MAIN ---- */
+        .signup-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+
+        .signup-card {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        /* ---- PROGRESS ---- */
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .progress-step {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.08);
+            transition: background 0.4s;
+        }
+        .progress-step.active { background: var(--blue); }
+        .progress-step.done { background: var(--green); }
+
+        .progress-label {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        /* ---- STEPS ---- */
+        .step { display: none; }
+        .step.active { display: block; }
+
+        .step h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .step .subtitle {
+            font-size: 15px;
+            color: var(--gray-400);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        /* ---- BUTTONS ---- */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+        }
+
+        .btn-google {
+            background: var(--white);
+            color: var(--gray-800);
+            margin-bottom: 12px;
+        }
+        .btn-google:hover { background: var(--gray-100); }
+
+        .btn-google svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-linkedin {
+            background: #0A66C2;
+            color: var(--white);
+            margin-bottom: 24px;
+        }
+        .btn-linkedin:hover { background: #004182; }
+
+        .btn-primary {
+            background: var(--blue);
+            color: var(--white);
+        }
+        .btn-primary:hover { background: var(--blue-hover); transform: translateY(-1px); }
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ---- DIVIDER ---- */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+        .divider span {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        /* ---- INPUTS ---- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gray-300);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(61, 127, 255, 0.15);
+        }
+        .form-input::placeholder { color: var(--gray-600); }
+
+        /* ---- OTP ---- */
+        .otp-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .otp-input {
+            flex: 1;
+            height: 56px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .otp-input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(61, 127, 255, 0.15);
+        }
+
+        .resend-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+        .resend-link a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .resend-link a:hover { text-decoration: underline; }
+
+        /* ---- PASSWORD STRENGTH ---- */
+        .password-strength {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            margin-bottom: 4px;
+        }
+        .password-strength-bar {
+            flex: 1;
+            height: 3px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.08);
+            transition: background 0.3s;
+        }
+
+        .password-hint {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        /* ---- MISC ---- */
+        .terms {
+            font-size: 12px;
+            color: var(--gray-600);
+            text-align: center;
+            margin-top: 24px;
+            line-height: 1.6;
+        }
+        .terms a {
+            color: var(--gray-400);
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+        .back-link:hover { color: var(--gray-300); }
+
+        /* ---- SUCCESS ---- */
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: var(--green);
+        }
+
+        .success-text {
+            text-align: center;
+        }
+
+        .success-text h1 {
+            text-align: center;
+        }
+
+        .success-text .subtitle {
+            text-align: center;
+        }
+
+        .email-display {
+            background: rgba(61, 127, 255, 0.08);
+            border: 1px solid rgba(61, 127, 255, 0.15);
+            border-radius: 10px;
+            padding: 12px 16px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 24px;
+            word-break: break-all;
+        }
+
+        @media (max-width: 480px) {
+            .signup-card { padding: 0 4px; }
+            .step h1 { font-size: 24px; }
+            .otp-input { height: 48px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">termene<span>.ro</span></a>
+    <div class="nav-login">Already have an account? <a href="dashboard.html">Log in</a></div>
+</nav>
+
+<div class="signup-container">
+    <div class="signup-card">
+
+        <!-- Progress -->
+        <div class="progress-label" id="progressLabel">Step 1 of 3</div>
+        <div class="progress-bar">
+            <div class="progress-step active" id="prog1"></div>
+            <div class="progress-step" id="prog2"></div>
+            <div class="progress-step" id="prog3"></div>
+        </div>
+
+        <!-- STEP 1: Choose method -->
+        <div class="step active" id="step1">
+            <h1>Create your free account</h1>
+            <p class="subtitle">Get instant access to company data. No credit card required.</p>
+
+            <button class="btn btn-google" onclick="goToStep(4)">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Continue with Google
+            </button>
+
+            <button class="btn btn-linkedin" onclick="goToStep(4)">
+                <i data-lucide="linkedin" style="width:20px;height:20px"></i>
+                Continue with LinkedIn
+            </button>
+
+            <div class="divider"><span>or use email</span></div>
+
+            <div class="form-group">
+                <label for="email">Work email</label>
+                <input type="email" id="email" class="form-input" placeholder="you@company.com">
+            </div>
+
+            <button class="btn btn-primary" id="emailBtn" onclick="submitEmail()">
+                Continue with email
+            </button>
+
+            <p class="terms">
+                By creating an account, you agree to our<br>
+                <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </p>
+        </div>
+
+        <!-- STEP 2: OTP -->
+        <div class="step" id="step2">
+            <a class="back-link" onclick="goToStep(1)">
+                <i data-lucide="arrow-left" style="width:16px;height:16px"></i>
+                Back
+            </a>
+
+            <h1>Check your email</h1>
+            <p class="subtitle">We sent a 6-digit verification code to:</p>
+
+            <div class="email-display" id="emailDisplay">you@company.com</div>
+
+            <div class="form-group">
+                <label>Verification code</label>
+                <div class="otp-group">
+                    <input type="text" class="otp-input" maxlength="1" data-otp="0" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" data-otp="1" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" data-otp="2" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" data-otp="3" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" data-otp="4" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" data-otp="5" inputmode="numeric">
+                </div>
+            </div>
+
+            <p class="resend-link">Didn't receive it? <a href="#" onclick="event.preventDefault()">Resend code</a></p>
+
+            <button class="btn btn-primary" onclick="goToStep(3)">Verify code</button>
+        </div>
+
+        <!-- STEP 3: Password -->
+        <div class="step" id="step3">
+            <a class="back-link" onclick="goToStep(2)">
+                <i data-lucide="arrow-left" style="width:16px;height:16px"></i>
+                Back
+            </a>
+
+            <h1>Set your password</h1>
+            <p class="subtitle">Almost there — choose a secure password.</p>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="At least 8 characters" oninput="checkStrength()">
+                <div class="password-strength">
+                    <div class="password-strength-bar" id="str1"></div>
+                    <div class="password-strength-bar" id="str2"></div>
+                    <div class="password-strength-bar" id="str3"></div>
+                    <div class="password-strength-bar" id="str4"></div>
+                </div>
+                <p class="password-hint" id="strengthLabel">Use 8+ characters with a mix of letters, numbers & symbols</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="goToStep(4)">Create account</button>
+        </div>
+
+        <!-- STEP 4: SUCCESS -->
+        <div class="step" id="step4">
+            <div class="success-icon">
+                <i data-lucide="check" style="width:32px;height:32px"></i>
+            </div>
+            <div class="success-text">
+                <h1>You're in!</h1>
+                <p class="subtitle">Your free account is ready. Let's find your first company.</p>
+            </div>
+            <a href="dashboard.html" class="btn btn-primary" style="margin-top: 8px;">
+                Go to dashboard
+                <i data-lucide="arrow-right" style="width:18px;height:18px"></i>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    const steps = [
+        document.getElementById('step1'),
+        document.getElementById('step2'),
+        document.getElementById('step3'),
+        document.getElementById('step4'),
+    ];
+    const progs = [
+        document.getElementById('prog1'),
+        document.getElementById('prog2'),
+        document.getElementById('prog3'),
+    ];
+    const progressLabel = document.getElementById('progressLabel');
+
+    function goToStep(n) {
+        steps.forEach(s => s.classList.remove('active'));
+        steps[n - 1].classList.add('active');
+
+        progs.forEach((p, i) => {
+            p.classList.remove('active', 'done');
+            if (n === 4) {
+                p.classList.add('done');
+            } else if (i < n - 1) {
+                p.classList.add('done');
+            } else if (i === n - 1) {
+                p.classList.add('active');
+            }
+        });
+
+        if (n === 4) {
+            progressLabel.textContent = 'Done!';
+        } else {
+            progressLabel.textContent = `Step ${n} of 3`;
+        }
+
+        lucide.createIcons();
+    }
+
+    function submitEmail() {
+        const email = document.getElementById('email').value;
+        if (!email || !email.includes('@')) {
+            document.getElementById('email').focus();
+            return;
+        }
+        document.getElementById('emailDisplay').textContent = email;
+        goToStep(2);
+        // Auto-focus first OTP input
+        setTimeout(() => {
+            document.querySelector('.otp-input[data-otp="0"]').focus();
+        }, 100);
+    }
+
+    // OTP auto-advance
+    document.querySelectorAll('.otp-input').forEach((input, idx, arr) => {
+        input.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (val.length === 1 && idx < arr.length - 1) {
+                arr[idx + 1].focus();
+            }
+            // Auto-submit when all filled
+            const allFilled = Array.from(arr).every(i => i.value.length === 1);
+            if (allFilled) {
+                setTimeout(() => goToStep(3), 300);
+            }
+        });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+                arr[idx - 1].focus();
+            }
+        });
+        // Allow pasting full code
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+            text.split('').forEach((char, i) => {
+                if (arr[i]) arr[i].value = char;
+            });
+            if (text.length === 6) {
+                setTimeout(() => goToStep(3), 300);
+            }
+        });
+    });
+
+    // Password strength
+    function checkStrength() {
+        const pw = document.getElementById('password').value;
+        const bars = [
+            document.getElementById('str1'),
+            document.getElementById('str2'),
+            document.getElementById('str3'),
+            document.getElementById('str4'),
+        ];
+        const label = document.getElementById('strengthLabel');
+        let score = 0;
+        if (pw.length >= 8) score++;
+        if (/[A-Z]/.test(pw)) score++;
+        if (/[0-9]/.test(pw)) score++;
+        if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+        const colors = ['#EF4444', '#F59E0B', '#3D7FFF', '#10B981'];
+        const labels = [
+            'Use 8+ characters with a mix of letters, numbers & symbols',
+            'Weak — add uppercase letters and numbers',
+            'Fair — add a symbol for extra security',
+            'Good — almost there',
+            'Strong password',
+        ];
+
+        bars.forEach((bar, i) => {
+            bar.style.background = i < score ? colors[Math.min(score - 1, 3)] : 'rgba(255,255,255,0.08)';
+        });
+        label.textContent = labels[score];
+        if (score >= 3) label.style.color = '#10B981';
+        else if (score >= 2) label.style.color = '#3D7FFF';
+        else if (score >= 1) label.style.color = '#F59E0B';
+        else label.style.color = '#64748B';
+    }
+
+    // Enter key on email field
+    document.getElementById('email').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submitEmail();
+    });
+</script>
+
+</body>
+</html>
